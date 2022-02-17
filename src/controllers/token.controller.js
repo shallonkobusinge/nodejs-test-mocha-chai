@@ -28,7 +28,7 @@ exports.create = async (req, res) => {
     })
     if (sameTokenGenerated) {
         sameTokenGenerated.status = "USED"; //change token status
-        res.status(400).send({ success: false, message: "Token is invalid." });
+        res.status(400).send({ success: false, message: "Token is used already." });
         return;
     }
     const numberOfDayForAvalidToken = generateNumberOfDaysForAvalidToken(req.body.amount);
