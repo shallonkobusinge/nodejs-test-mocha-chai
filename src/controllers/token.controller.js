@@ -1,3 +1,4 @@
+const res = require("express/lib/response");
 const { validateAmount, validateMeter, validateToken, Token, generateToken, generateNumberOfDaysForAvalidToken } = require("../models/Token");
 
 exports.create = async (req, res) => {
@@ -8,12 +9,12 @@ exports.create = async (req, res) => {
 
     const validMeter = validateMeter(req.body.meter); //validate meter if has 6 digits
     if (!validMeter) {
-        res.status(400).send({ message: " Meter should be 6 digit number" });
+        res.status(400).send({ success: false, message: "Meter should be 6 digit number" });
         return;
     }
     const validAmount = validateAmount(req.body.amount); //validate amount
     if (validAmount === false) {
-        res.status(400).send({ message: " Amount should be divisable by 100 and less than 182,500frw" });
+        res.status(400).send({ success: false, message: "Amount should be divisable by 100 and less than 182,500frw" });
         return;
     }
 
@@ -22,22 +23,30 @@ exports.create = async (req, res) => {
     const sameTokenGenerated = await Token.findOne({
         $and: [
             { token: tokenGenerated },
-            { user: req.body.user }
+            { username: req.body.username }
         ]
     })
     if (sameTokenGenerated) {
-        res.status(400).send({ message: "Token is invalid." });
+        sameTokenGenerated.status = "USED"; //change token status
+        res.status(400).send({ success: false, message: "Token is invalid." });
         return;
     }
     const numberOfDayForAvalidToken = generateNumberOfDaysForAvalidToken(req.body.amount);
 
     let generateReport = new Token(req.body);
+
     generateReport.token = tokenGenerated;
     generateReport.numberOfDays = numberOfDayForAvalidToken;
+    generateReport.status = "ACTIVE";
 
     generateReport.save();
     return res.status(201).send({ success: true, message: " Token generated successfully", data: generateReport })
 
 
 
+};
+
+exports.getReport = async (req, res) => {
+    const report = await Token.find();
+    return res.status(200).send({ success: true, message: "Retrieved success", data: report });
 }

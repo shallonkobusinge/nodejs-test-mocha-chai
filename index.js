@@ -4,8 +4,8 @@ let app = express();
 let mongoose = require('mongoose');
 let morgan = require('morgan');
 let bodyParser = require('body-parser');
+const cors = require("cors");
 let port = 8080;
-// let book = require('./src/routes/book');
 let config = require('config'); //we load the db location from the JSON files
 //db options
 let options = {
@@ -29,17 +29,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text());
 app.use(bodyParser.json({ type: 'application/json' }));
+app.use(cors());
 
 app.get("/", (req, res) => res.json({ message: "Welcome to our Testing!" }));
-
-// app.route("/book")
-//     .get(book.getBooks)
-//     .post(book.postBook);
-// app.route("/book/:id")
-//     .get(book.getBook)
-//     .delete(book.deleteBook)
-//     .put(book.updateBook);
-
+require("./src/routes/token.router.js")(app); // token routes 
 
 app.listen(port);
 console.log("Listening on port " + port);

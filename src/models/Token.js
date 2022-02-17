@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
+const EStatus = ["USED", "ACTIVE"];
 
 
 const TokenSchema = new mongoose.Schema({
@@ -21,6 +22,10 @@ const TokenSchema = new mongoose.Schema({
     },
     numberOfDays: {
         type: Number,
+    },
+    status: {
+        type: String,
+        required: true,
     }
 
 },
@@ -30,7 +35,7 @@ const TokenSchema = new mongoose.Schema({
 
 );
 
-TokenSchema.plugin(pagination);
+
 
 
 exports.validateToken = (user) => {
@@ -39,7 +44,8 @@ exports.validateToken = (user) => {
         meter: Joi.string().required(),
         username: Joi.string().required(),
         token: Joi.string(),
-        numberOfDays: Joi.number()
+        numberOfDays: Joi.number(),
+        status: Joi.string().valid(...EStatus)
     })
     return schema.validate(user);
 };
