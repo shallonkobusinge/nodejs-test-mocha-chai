@@ -20,6 +20,8 @@ try {
     process.exit(1);
 }
 
+
+
 //parse application/json and look for raw text                                        
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
