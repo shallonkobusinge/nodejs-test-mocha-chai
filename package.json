@@ -13,6 +13,7 @@
     "joi": "^17.6.0",
     "joi-objectid": "^4.0.2",
     "mongoose": "^4.4.15",
+    "mongoose-timestamp": "^0.6.0",
     "morgan": "^1.7.0"
   },
   "devDependencies": {

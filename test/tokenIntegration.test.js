@@ -63,7 +63,7 @@ describe('/POST billing', () => {
             .send(token)
             .end((err, res) => {
                 res.should.have.status(400);
-                res.body.should.have.property("message").eql("Amount should be divisable by 100 and less than 182,500frw");
+                res.body.should.have.property("message").eql("Invalid Amount");
                 done();
             });
     });

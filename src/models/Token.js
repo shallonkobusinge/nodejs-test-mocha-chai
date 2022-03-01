@@ -1,16 +1,19 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
+const timestamps = require('mongoose-timestamp');
 Joi.objectId = require('joi-objectid')(Joi);
-const EStatus = ["USED", "ACTIVE"];
+const EStatus = ["USED", "ACTIVE", "EXPIRED"];
 
 
-const TokenSchema = new mongoose.Schema({
+const TokenSchema = mongoose.Schema({
     amount: {
-        type: String,
+        type: Number,
         required: true,
     },
     meter: {
-        type: String,
+        type: Number,
+        minLength: 6,
+        maxLength: 6,
         required: true,
     },
     username: {
@@ -18,46 +21,55 @@ const TokenSchema = new mongoose.Schema({
         required: true,
     },
     token: {
-        type: String,
+        type: Number,
+        minLength: 8,
+        maxLength: 8,
+        unique: true,
+        required: true,
     },
     numberOfDays: {
         type: Number,
     },
     status: {
         type: String,
+        enum: EStatus,
+        required: true,
+    },
+    acquiredOnDate: {
+        type: Date,
+        required: true,
+    },
+    expiryDate: {
+        type: Date,
         required: true,
     }
 
-},
-    {
-        timestamps: true
-    }
+});
 
-);
-
-
+TokenSchema.plugin(timestamps);
 
 
 exports.validateToken = (user) => {
     const schema = Joi.object({
-        amount: Joi.string().required(),
-        meter: Joi.string().required(),
+        amount: Joi.number().integer().required(),
+        meter: Joi.number().integer().required(),
         username: Joi.string().required(),
-        token: Joi.string(),
-        numberOfDays: Joi.number(),
-        status: Joi.string().valid(...EStatus)
     })
     return schema.validate(user);
 };
 exports.validateMeter = (phone) => {
-    var pattern = new RegExp("\\d{6}");;
-    return phone.match(pattern);
+    var pattern = /^[0-9]{6}$/;
+    return pattern.test(phone);
 }
 
 
 exports.validateAmount = (number) => {
-    const validNumber = (number % 100 == 0) && (number < 182500) ? number : false;
-    return validNumber;
+    return (number % 100 == 0) && (number < 182500) && (number >= 100);
+}
+
+exports.validateTokenNumber = (token) => {
+    const pattern = /^[0-9]{8}$/;
+    return pattern.test(token);
 }
 
 exports.generateNumberOfDaysForAvalidToken = (number) => {
