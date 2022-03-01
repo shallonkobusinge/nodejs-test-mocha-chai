@@ -62,7 +62,6 @@ exports.validateMeter = (phone) => {
     return pattern.test(phone);
 }
 
-
 exports.validateAmount = (number) => {
     return (number % 100 == 0) && (number < 182500) && (number >= 100);
 }

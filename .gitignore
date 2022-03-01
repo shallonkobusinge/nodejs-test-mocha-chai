@@ -1,8 +1,2 @@
-
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-.idea
-
+# Dependency directories
+node_modules/

@@ -17,8 +17,6 @@ exports.create = async (req, res) => {
     if (error) {
         res.status(400).send({ message: error.details[0].message });
     }
-
-
     if (!validateMeter(req.body.meter)) { //validate meter if has 6 digits
         res.status(400).send({ success: false, message: "Meter should be 6 digit number" });
         return;
