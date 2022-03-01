@@ -16,5 +16,6 @@ describe('validate the token model data entered', () => {
         expect(validateTokenNumber(10)).to.be.false;
         expect(validateTokenNumber(105699)).to.be.false;
         expect(validateTokenNumber(10679912)).to.be.true;
+
     })
 })
