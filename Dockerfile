@@ -3,10 +3,10 @@
 
 FROM node:16
 
-WORKDIR /usr/app/nodejs-test-mocha-chai/
-COPY nodejs-test-mocha-chai/package*.json ./
+WORKDIR /usr/app/backend/
+COPY ./package*.json ./
 RUN npm install 
-COPY nodejs-test-mocha-chai/ ./
+COPY . .
 
 ENV PORT 8000
 
