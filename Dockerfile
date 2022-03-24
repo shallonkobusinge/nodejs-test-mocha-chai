@@ -1,12 +1,12 @@
 
-# Setup the backend
+# Setup the nodejs-test-mocha-chai
 
 FROM node:16
 
-WORKDIR /usr/app/backend/
-COPY backend/package*.json ./
+WORKDIR /usr/app/nodejs-test-mocha-chai/
+COPY nodejs-test-mocha-chai/package*.json ./
 RUN npm install 
-COPY backend/ ./
+COPY nodejs-test-mocha-chai/ ./
 
 ENV PORT 8000
 
